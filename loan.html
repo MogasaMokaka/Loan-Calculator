@@ -6,7 +6,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Calculator</title>
 </head>
-<body>
+<style>
+
+    @media (max-width:600px) {
+
+        *{
+        background-color: black;
+        color: white;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    h1{
+        text-align: center;
+        border-bottom: 2px red solid;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+
+    }
+
+    .main{
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 30px;
+    }
+
+    #results{
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 30px;
+    }
+
+    #loading, #results{
+        display: none;
+        text-align: center;
+    }
+
+    label{
+        font-size: 15px;
+    }
+
+    .input{
+        border-radius: 20px;
+        margin: 10px;
+        padding: 8px;
+        background-color: aliceblue;
+        color: black;
+        font-size: 17px;
+    }
+
+    .button{
+        border-radius: 20px;
+        margin: 10px;
+        padding: 10px;
+        background-color: aliceblue;
+        font-size: 17px;
+        color: black;
+    }
+
+    }
     
+    
+</style>
+<body>
+    <h1>Loan Calculator</h1>
+    <form  action="#">
+        <div class="main">
+            <label>Amount</label>
+            <input class="input" type="text" id="amount" placeholder="Amount about to loan" autocomplete="off">
+            <label>Annual Interst</label>
+            <input class="input" type="text" id="interest"  placeholder="Write without %sign">
+            <label>Years</label>
+            <input class="input" type="text" id="years" 
+            placeholder="Years to Repay">
+            <input class="button" type="submit" value="Calculate">
+        </div>
+    </form>
+
+    <!-- Loader here -->
+    <div id="loading">
+        <img src="loading.gif" width="200px" height="200px">
+    </div>
+    <!-- Results -->
+    
+    <div id="results">
+        <h1>Results</h1>
+        <label>Monthly Payment</label>
+            <input class="input" type="text" id="monthly-payment" disabled>
+
+            <label>Total Payment</label>
+            <input class="input" type="text" id="total-payment" disabled>
+
+            <label>Total Interest</label>
+            <input class="input" type="text" id="total-interest" disabled>
+    </div>
+         
+    <script>
+        
+        document.querySelector('form').addEventListener('submit', function(e){
+
+            document.getElementById('results').style.display = 'none';
+
+            document.getElementById('loading').style.display = 'block';
+
+            setTimeout(calculateResult, 200);
+
+
+
+        });
+
+        function calculateResult() {
+           const amount = document.getElementById('amount');
+           const interest = document.getElementById('interest');
+           const years = document.getElementById('years');
+           const monthlypayment = document.getElementById('monthly-payment');
+           const totalinterest = document.getElementById('total-interest');
+           const totalpayment = document.getElementById('total-payment');
+            
+
+           const principle = parseFloat(amount.value);
+           const calculatedInterest = parseFloat(interest.value) / 100 / 12;
+           const calculatedPayments = parseFloat(years.value) * 12;
+
+
+           const x  = Math.pow(1 + calculatedInterest, calculatedPayments);
+           const monthly = (principle*x*calculatedInterest)/(x-1);
+            
+           if (isFinite(monthly)) {
+                monthlypayment.value = monthly.toFixed(2);
+                totalpayment.value = (monthly*calculatedPayments).toFixed(2);
+                totalinterest.value = ((monthly*calculatedPayments)-principle).toFixed(2)
+
+
+                document.getElementById('results').style.display = 'block';
+
+                document.getElementById('loading').style.display = 'none';
+
+               
+
+
+           } else {
+            document.getElementById('results').style.display = 'block';
+
+            document.getElementById('loading').style.display = 'none';
+
+           }
+
+
+            
+        }
+    </script>
 </body>
 </html>
